@@ -88,7 +88,10 @@ def test_cls_error(net, imdb, cls_idx):
     # iterate over images, collect error vectors
     val_ind = np.any(imdb.gtdb['attr'][:, cls_idx]>=0, axis=0)
     err = np.zeros((num_images, np.sum(val_ind))) # in {0,1} format
+    neg_err = np.zeros((num_images, np.sum(val_ind))) 
+    pos_err = np.zeros((num_images, np.sum(val_ind)))
     timer = Timer()
+    # with open('/deep_share/output/mnist_train_error.txt', 'w') as f:
     for i in xrange(num_images):
         # prepare blobs 
         label_name = "prob"
@@ -103,6 +106,9 @@ def test_cls_error(net, imdb, cls_idx):
         scores = blobs_out[label_name]
         # evaluate the scores
         err[i,:] = imdb.evaluate(scores[:, val_ind], np.array([i]), cls_idx[val_ind])
+        neg_err[i,:] = imdb.evaluate(scores[:, val_ind], np.array([i]), cls_idx[val_ind], eval_type="neg")
+        pos_err[i,:] = imdb.evaluate(scores[:, val_ind], np.array([i]), cls_idx[val_ind], eval_type="pos")
+        #f.write('Image {} error: {}'.format(str(i), ','.join(str(elt) for elt in (err[i,:]).tolist()))) 
         # print infos
         print 'Image {}/{} ::: speed: {:.3f}s per image.'.format(i, num_images, timer.average_time)
 
@@ -116,11 +122,19 @@ def test_cls_error(net, imdb, cls_idx):
     # get error for each class
     class_names = imdb.classes
     mean_err = np.nanmean(err, axis=0)
+    mean_neg_err = np.nanmean(neg_err, axis=0)
+    mean_pos_err = np.nanmean(pos_err, axis=0)
     for i in xrange(np.sum(val_ind)):
         print '!!! Error rate for class {} is: {}'.\
             format(class_names[cls_idx[val_ind][i]], mean_err[i])
+        print '!!! False negative error rate for class {} is: {}'.\
+            format(class_names[cls_idx[val_ind][i]], mean_neg_err[i])
+        print '!!! False positive error rate for class {} is: {}'.\
+            format(class_names[cls_idx[val_ind][i]], mean_pos_err[i])
 
     print '!!! The average error rate is {}.'.format(mean_err.mean())
+    print '!!! The average false negative error rate is {}.'.format(mean_neg_err.mean())
+    print '!!! The average false positive error rate is {}.'.format(mean_pos_err.mean())
     print '---------------------------------------------------------------'
 
 def save_softlabels(net, image_list, score_file, labeler):

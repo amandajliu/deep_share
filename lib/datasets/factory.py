@@ -29,6 +29,7 @@ from celeba_plus_webcam_cls import CelebA_Plus_Webcam_Cls
 from IBMattributes import IBMAttributes
 from deepfashion import DeepFashion
 from personattr import PersonAttributes
+from mnist_data import MnistData
 
 # dataset functor
 __sets = {}
@@ -91,6 +92,12 @@ for split in ['train', 'val']:
     name = 'IBMattributes_{}'.format(split)
     __sets[name] = (lambda split=split:
                     IBMAttributes(split))
+
+# setup MNIST dataset
+for split in ['train', 'test']:
+    name = 'mnist_{}'.format(split)
+    __sets[name] = (lambda split=split:
+                    MnistData(split))
 
 def get_imdb(name):
     """ Get an imdb (image database) by name."""

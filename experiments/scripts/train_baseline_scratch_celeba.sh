@@ -17,7 +17,7 @@ echo Logging output to "$LOG"
 
 cd ../..
 
-time ./tools/train_cls.py --gpu 0 \
+time ./tools/train_cls.py \
     --traindb celeba_train \
     --valdb celeba_val \
     --iters ${iters} \

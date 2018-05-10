@@ -1,0 +1,4 @@
+./train_baseline_scratch_mnist.sh 600 200 0.001 small32-lowvgg16 0
+
+# run trained model on the training images
+./test_cls.sh mnist_train mnist_train mnist_baseline_scratch_small32-lowvgg16_0

@@ -72,8 +72,8 @@ if __name__ == '__main__':
     print('Using config:')
     pprint.pprint(cfg)
 
-    caffe.set_mode_gpu()
-    caffe.set_device(args.gpu_id)
+    #caffe.set_mode_gpu()
+    #caffe.set_device(args.gpu_id)
     net = caffe.Net(args.model, args.weights, caffe.TEST)
     net.name = os.path.splitext(os.path.basename(args.weights))[0]
 

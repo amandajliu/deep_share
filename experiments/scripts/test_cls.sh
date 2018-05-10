@@ -21,7 +21,7 @@ echo Logging output to "$LOG"
 
 cd ../..
 
-time ./tools/test_cls.py --gpu 0 \
+time ./tools/test_cls.py \
   --model ${outputpath}/${datapath}/${train_imdb}/prototxt/test.prototxt \
   --weights ${outputpath}/${datapath}/${train_imdb}/deploy.caffemodel \
   --imdb ${test_imdb}
